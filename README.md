@@ -22,6 +22,7 @@ Sistema de Gerenciamento de E-commerce com TypeScript, capaz de administrar um c
 ├── src/ -- Código-fonte do projeto
 │   carrinho.ts -- operações do carrinho e cálculos dos valores.
 │   clientes.ts -- cadastro e consulta de clientes.
+│   dados.ts -- dados da aplicação, incluindo produtos e clientes.
 │   main.ts -- inicialização da aplicação e demonstração das funcionalidades.
 │   pedidos.ts -- finalização e consulta de pedidos.
 │   produtos.ts -- cadastro, consulta, atualização e remoção de produtos.
