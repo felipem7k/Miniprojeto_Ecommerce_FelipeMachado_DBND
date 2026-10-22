@@ -39,14 +39,8 @@ Sistema de Gerenciamento de E-commerce com TypeScript, capaz de administrar um c
 
 1. Clone o repositório para sua máquina local.
 2. Navegue até o diretório do projeto.
-3. Instale as dependências do projeto usando o comando:
-   ```
-   npm install
-   ```
-4. Inicie o servidor de desenvolvimento com o comando:
-   ```
-    npm start
-    ```
+3. Compile o código TypeScript para JavaScript usando o comando `tsc`.
+4. Execute o arquivo `main.js` gerado na pasta `dist` usando o comando `node dist/main.js`.
 
 ## Exemplos das principais operações:
 - Cadastro de um novo produto.
