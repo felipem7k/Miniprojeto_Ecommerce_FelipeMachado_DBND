@@ -18,15 +18,15 @@ Sistema de Gerenciamento de E-commerce com TypeScript, capaz de administrar um c
 
 ## Estrutura dos arquivos:
 
-```
-├── src/
-│   carrinho.ts
-│   clientes.ts
-│   main.ts
-│   pedidos.ts
-│   produtos.ts
-│   relatorios.ts
-│   types.ts
+``` bash
+├── src/ -- Código-fonte do projeto
+│   carrinho.ts -- operações do carrinho e cálculos dos valores.
+│   clientes.ts -- cadastro e consulta de clientes.
+│   main.ts -- inicialização da aplicação e demonstração das funcionalidades.
+│   pedidos.ts -- finalização e consulta de pedidos.
+│   produtos.ts -- cadastro, consulta, atualização e remoção de produtos.
+│   relatorios.ts -- funções de consolidação e apresentação dos resultados.
+│   types.ts -- definição dos tipos utilizados pelo sistema.
 └── dist/ -- Saída dos arquivos compilados
 ```
 
