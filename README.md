@@ -28,6 +28,7 @@ Sistema de Gerenciamento de E-commerce com TypeScript, capaz de administrar um c
 │   produtos.ts -- cadastro, consulta, atualização e remoção de produtos.
 │   relatorios.ts -- funções de consolidação e apresentação dos resultados.
 │   types.ts -- definição dos tipos utilizados pelo sistema.
+│   uteis.ts -- funções utilitárias (geral).
 └── dist/ -- Saída dos arquivos compilados
 ```
 
