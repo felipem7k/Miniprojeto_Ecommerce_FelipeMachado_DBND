@@ -1,10 +1,10 @@
-type Cliente = {
+export type Cliente = {
     id: number;
     nome: string;
     email: string;
 }
 
-type Produto = {
+export type Produto = {
     id: number;
     nome: string;
     categoria: string;
@@ -12,12 +12,12 @@ type Produto = {
     estoque: number;
 }
 
-type ItemCarrinho = {
+export type ItemCarrinho = {
     produtoId: number;
     quantidade: number;
 }
 
-type Pedido = {
+export type Pedido = {
     id: number;
     clienteId: number;
     itens: ItemCarrinho[];
