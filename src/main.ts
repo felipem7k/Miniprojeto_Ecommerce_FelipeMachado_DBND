@@ -2,7 +2,7 @@
 
 import { adicionaItemCarrinho, calculaTotalCarrinho, mostraTotalCarrinho, pegaCarrinhoPorClienteId, removeItemCarrinho } from "./carrinho";
 import { cadastraCliente, exibeClientes } from "./clientes";
-import { finalizaPedido } from "./pedidos";
+import { exibePedidos, finalizaPedido } from "./pedidos";
 import { exibeProdutos } from "./produtos";
 
 // exibeProdutos();
@@ -71,3 +71,5 @@ if (carrinho) {
 }
 
 exibeProdutos();
+
+exibePedidos();

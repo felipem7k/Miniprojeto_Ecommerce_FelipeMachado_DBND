@@ -2,6 +2,8 @@ import { buscaClientePorId } from "./clientes";
 import { buscaProdutoPorId, reduzEstoqueProduto } from "./produtos";
 import { Pedido } from "./types";
 
+const pedidos: Pedido[] = [];
+
 const verificaEstoque = (pedido: Pedido): boolean => {
     for (const item of pedido.itens) {
         const produto = buscaProdutoPorId(item.produtoId);
@@ -58,5 +60,30 @@ export const finalizaPedido = (pedido: Pedido): void => {
         reduzEstoqueProduto(item.produtoId, item.quantidade);
     }
 
+    pedidos.push(pedido);
+
     console.log(`[INFO]: Pedido ${pedido.id} finalizado com sucesso!`);
+}
+
+export const listaPedidos = (): Pedido[] => {
+    return pedidos;
+}
+
+export const exibePedidos = (): void => {
+    console.log("Pedidos Registrados:");
+
+    for (const pedido of pedidos) {
+        console.log(`
+            ID: ${pedido.id}
+            Cliente ID: ${pedido.clienteId}
+            Itens: ${JSON.stringify(pedido.itens)}
+            Total: ${pedido.total}
+            Data: ${pedido.data.toISOString()}
+        `);
+        console.log("--------------------------------------------------")
+    }
+}
+
+export const buscaPedidosPorClienteId = (clienteId: number): Pedido[] => {
+    return pedidos.filter(pedido => pedido.clienteId === clienteId);
 }
