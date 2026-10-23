@@ -2,7 +2,7 @@ import { produtos } from "./dados";
 import { Categoria, Produto } from "./types";
 import { sanitizar } from "./uteis";
 
-const pegaIndexProduto = (produtoId: number): number | undefined => produtos.findIndex(produto => produto.id === produtoId);
+const pegaIndexProduto = (produtoId: number): number => produtos.findIndex(produto => produto.id === produtoId);
 
 const verificaNome = (nome: string): boolean => {
     const nomeSanitizado = sanitizar(nome);
@@ -84,7 +84,7 @@ export const buscarProdutosPorCategoria = (categoria: Categoria): Produto[] => {
 export const atualizaProduto = (produto: Produto): boolean => {
     const index = pegaIndexProduto(produto.id);
 
-    if (!index) {
+    if (index === -1) {
         console.log(`[ERRO AO ATUALIZAR]: Produto com ID ${produto.id} não encontrado.`);
         return false;
     }
@@ -96,12 +96,34 @@ export const atualizaProduto = (produto: Produto): boolean => {
 export const removeProduto = (produtoId: number): boolean => {
     const index = pegaIndexProduto(produtoId);
 
-    if (!index) {
+    if (index === -1) {
         console.log(`[ERRO AO REMOVER]: Produto com ID ${produtoId} não encontrado.`);
         return false;
     }
 
     produtos.splice(index, 1);
 
+    return true;
+}
+
+export const reduzEstoqueProduto = (produtoId: number, quantidade: number): boolean => {
+    const index = pegaIndexProduto(produtoId);
+
+    if (index === -1) {
+        console.log(`[ERRO AO ATUALIZAR ESTOQUE]: Produto com ID ${produtoId} não encontrado.`);
+        return false;
+    }
+
+    if (quantidade < 0) {
+        console.log(`[ERRO AO ATUALIZAR ESTOQUE]: Quantidade inválida. Não pode ser negativa.`);
+        return false;
+    }
+
+    if (produtos[index].estoque < quantidade) {
+        console.log(`[ERRO AO ATUALIZAR ESTOQUE]: Produto com ID ${produtoId} não possui estoque suficiente.`);
+        return false;
+    }
+
+    produtos[index].estoque -= quantidade;
     return true;
 }
