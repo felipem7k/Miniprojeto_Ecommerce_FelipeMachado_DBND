@@ -14,6 +14,12 @@ export type Produto = {
     estoque: number;
 }
 
+export type Carrinho = {
+    clienteId: number;
+    itens: ItemCarrinho[];
+    total: number;
+}
+
 export type ItemCarrinho = {
     produtoId: number;
     quantidade: number;
