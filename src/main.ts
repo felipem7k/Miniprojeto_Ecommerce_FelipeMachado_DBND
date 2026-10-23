@@ -1,25 +1,35 @@
-import { cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
+// import { cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
 
-exibeProdutos();
+import { cadastraCliente, exibeClientes } from "./clientes";
 
-cadastraProduto({
+// exibeProdutos();
+
+// cadastraProduto({
+//     id: 5,
+//     nome: "Relógio",
+//     categoria: "Eletrônicos",
+//     preco: 500,
+//     estoque: 8
+// });
+
+// cadastraProduto({
+//     id: 6,
+//     nome: "Jaqueta",
+//     categoria: "Roupas",
+//     preco: -1,
+//     estoque: 12
+// });
+
+// exibeProdutos();
+
+// removeProduto(2);
+
+// exibeProdutos();
+
+cadastraCliente({
     id: 5,
-    nome: "Relógio",
-    categoria: "Eletrônicos",
-    preco: 500,
-    estoque: 8
+    nome: "Luiz Fernando",
+    email: "luiz.fernando@example.com"
 });
 
-cadastraProduto({
-    id: 6,
-    nome: "Jaqueta",
-    categoria: "Roupas",
-    preco: -1,
-    estoque: 12
-});
-
-exibeProdutos();
-
-removeProduto(2);
-
-exibeProdutos();
+exibeClientes();
