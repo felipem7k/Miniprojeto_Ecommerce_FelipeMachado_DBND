@@ -1,5 +1,6 @@
 // import { cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
 
+import { adicionaItemCarrinho, mostraTotalCarrinho, removeItemCarrinho } from "./carrinho";
 import { cadastraCliente, exibeClientes } from "./clientes";
 
 // exibeProdutos();
@@ -33,3 +34,22 @@ cadastraCliente({
 });
 
 exibeClientes();
+
+adicionaItemCarrinho({
+    produtoId: 1,
+    quantidade: 2
+});
+
+adicionaItemCarrinho({
+    produtoId: 2,
+    quantidade: 1
+});
+
+removeItemCarrinho(1, 1);
+
+adicionaItemCarrinho({
+    produtoId: 3,
+    quantidade: 3
+});
+
+mostraTotalCarrinho();
