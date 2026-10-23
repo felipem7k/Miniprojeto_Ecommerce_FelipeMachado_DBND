@@ -1,6 +1,6 @@
 import { clientes } from "./dados";
 import { Cliente } from "./types";
-import { sanitizar } from "./uteis";
+import { sanitizar, validarEmail } from "./uteis";
 
 const pegaIndexCliente = (clienteId: number): number | undefined => clientes.findIndex(cliente => cliente.id === clienteId);
 
@@ -24,6 +24,16 @@ export const cadastraCliente = (cliente: Cliente): boolean => {
 
     if (!verificaNome(cliente.nome)) {
         console.log(`[ERRO AO CADASTRAR]: Nome do cliente "${cliente.nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
+        return false;
+    }
+
+    if (!validarEmail(cliente.email)) {
+        console.log(`[ERRO AO CADASTRAR]: Email do cliente "${cliente.email}" é inválido.`);
+        return false;
+    }
+
+    if (buscaClientesPorNome(cliente.nome)) {
+        console.log(`[ERRO AO CADASTRAR]: Cliente com nome "${cliente.nome}" já existe.`);
         return false;
     }
 
@@ -53,4 +63,8 @@ export const buscaClientePorId = (id: number): Cliente | undefined => {
 
 export const buscaClientesPorNome = (nome: string): Cliente | undefined => {
     return clientes.find(cliente => sanitizar(cliente.nome) === sanitizar(nome));
+}
+
+export const buscaClientesPorEmail = (email: string): Cliente | undefined => {
+    return clientes.find(cliente => sanitizar(cliente.email) === sanitizar(email));
 }
