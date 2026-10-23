@@ -34,8 +34,7 @@ export const adicionaItemCarrinho = (clienteId: number, item: ItemCarrinho): voi
     if (!carrinho) {
         carrinho = {
             clienteId: clienteId,
-            itens: [],
-            total: 0
+            itens: []
         };
         carrinhos.push(carrinho);
         console.log(`[INFO]: Carrinho criado para o cliente ${clienteId}!`);
@@ -111,6 +110,14 @@ const calculaSubtotalItem = (item: ItemCarrinho): number => {
     return item.quantidade * (buscaProdutoPorId(item.produtoId)?.preco || 0);
 }
 
+export const calculaTotalCarrinho = (carrinho: Carrinho): number => {
+    let total = 0;
+    for (const item of carrinho.itens) {
+        total += calculaSubtotalItem(item);
+    }
+    return total;
+}
+
 export const mostraTotalCarrinho = (clienteId: number): void => {
     const carrinho = pegaCarrinhoPorClienteId(clienteId);
 
@@ -124,7 +131,6 @@ export const mostraTotalCarrinho = (clienteId: number): void => {
         return;
     }
 
-    let total = 0;
     console.log(`Subtotal do Carrinho do Cliente ${clienteId}:`);
 
     console.log("--------------------------------------------------");
@@ -135,10 +141,10 @@ export const mostraTotalCarrinho = (clienteId: number): void => {
             continue;
         }
         const subtotal = calculaSubtotalItem(item);
-        total += subtotal;
         console.log(`ITEM: ${produto.nome} (ID: ${item.produtoId}) X ${item.quantidade}: R$ ${subtotal.toFixed(2)}`);
     }
     console.log("--------------------------------------------------");
 
+    const total = calculaTotalCarrinho(carrinho);
     console.log(`TOTAL: R$ ${total.toFixed(2)}`);
 }
