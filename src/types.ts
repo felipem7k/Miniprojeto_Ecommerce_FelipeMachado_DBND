@@ -17,7 +17,6 @@ export type Produto = {
 export type Carrinho = {
     clienteId: number;
     itens: ItemCarrinho[];
-    total: number;
 }
 
 export type ItemCarrinho = {
