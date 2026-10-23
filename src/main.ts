@@ -1,7 +1,9 @@
 // import { cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
 
-import { adicionaItemCarrinho, mostraTotalCarrinho, removeItemCarrinho } from "./carrinho";
+import { adicionaItemCarrinho, calculaTotalCarrinho, mostraTotalCarrinho, pegaCarrinhoPorClienteId, removeItemCarrinho } from "./carrinho";
 import { cadastraCliente, exibeClientes } from "./clientes";
+import { finalizaPedido } from "./pedidos";
+import { exibeProdutos } from "./produtos";
 
 // exibeProdutos();
 
@@ -26,6 +28,8 @@ import { cadastraCliente, exibeClientes } from "./clientes";
 // removeProduto(2);
 
 // exibeProdutos();
+
+exibeProdutos();
 
 cadastraCliente({
     id: 5,
@@ -53,3 +57,17 @@ adicionaItemCarrinho(5, {
 });
 
 mostraTotalCarrinho(5);
+
+const carrinho = pegaCarrinhoPorClienteId(5);
+
+if (carrinho) {
+    finalizaPedido({
+        id: 1,
+        clienteId: 5,
+        itens: carrinho.itens || [],
+        total: calculaTotalCarrinho(carrinho) || 0,
+        data: new Date()
+    });
+}
+
+exibeProdutos();
