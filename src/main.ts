@@ -3,31 +3,19 @@
 import { adicionaItemCarrinho, calculaTotalCarrinho, mostraTotalCarrinho, pegaCarrinhoPorClienteId, removeItemCarrinho } from "./carrinho";
 import { cadastraCliente, exibeClientes } from "./clientes";
 import { exibePedidos, finalizaPedido } from "./pedidos";
-import { exibeProdutos } from "./produtos";
+import { cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
 
-// exibeProdutos();
+exibeProdutos();
 
-// cadastraProduto({
-//     id: 5,
-//     nome: "Relógio",
-//     categoria: "Eletrônicos",
-//     preco: 500,
-//     estoque: 8
-// });
+cadastraProduto("Relógio", "Eletrônicos", 500, 8);
 
-// cadastraProduto({
-//     id: 6,
-//     nome: "Jaqueta",
-//     categoria: "Roupas",
-//     preco: -1,
-//     estoque: 12
-// });
+cadastraProduto("Jaqueta", "Roupas", -1, 12);
 
-// exibeProdutos();
+exibeProdutos();
 
-// removeProduto(2);
+removeProduto(2);
 
-// exibeProdutos();
+exibeProdutos();
 
 exibeProdutos();
 

@@ -4,6 +4,8 @@ import { sanitizar } from "./uteis";
 
 const pegaIndexProduto = (produtoId: number): number => produtos.findIndex(produto => produto.id === produtoId);
 
+const pegaUltimoIdProduto = (): number => produtos.length > 0 ? produtos[produtos.length - 1].id : 0;
+
 const verificaNome = (nome: string): boolean => {
     const nomeSanitizado = sanitizar(nome);
 
@@ -14,41 +16,52 @@ const verificaNome = (nome: string): boolean => {
     return true;
 };
 
-export const cadastraProduto = (produto: Produto): boolean => {
-    const index = pegaIndexProduto(produto.id);
+export const cadastraProduto = (nome: string, categoria: Categoria, preco: number, estoque: number = 1): Produto | undefined => {
+    const id = pegaUltimoIdProduto() + 1;
+
+    const index = pegaIndexProduto(id);
 
     if (index !== -1) {
-        console.log(`[ERRO AO CADASTRAR]: Produto com ID ${produto.id} já existe.`);
-        return false;
+        console.log(`[ERRO AO CADASTRAR]: Produto com ID ${id} já existe.`);
+        return;
     }
 
-    if (!verificaNome(produto.nome)) {
-        console.log(`[ERRO AO CADASTRAR]: Nome do produto "${produto.nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
-        return false;
+    if (!verificaNome(nome)) {
+        console.log(`[ERRO AO CADASTRAR]: Nome do produto "${nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
+        return;
     }
 
-    if (buscaProdutosPorNome(produto.nome)) {
-        console.log(`[ERRO AO CADASTRAR]: Produto com nome "${produto.nome}" já existe.`);
-        return false;
+    if (buscaProdutosPorNome(nome)) {
+        console.log(`[ERRO AO CADASTRAR]: Produto com nome "${nome}" já existe.`);
+        return;
     }
 
-    if (produto.preco <= 0) {
-        console.log(`[ERRO AO CADASTRAR]: Preço do produto "${produto.nome}" é inválido. Deve ser maior que 0.`);
-        return false;
+    if (preco <= 0) {
+        console.log(`[ERRO AO CADASTRAR]: Preço do produto "${nome}" é inválido. Deve ser maior que 0.`);
+        return;
     }
 
-    if (produto.estoque < 0) {
-        console.log(`[ERRO AO CADASTRAR]: Estoque do produto "${produto.nome}" é inválido. Não pode ser negativo.`);
-        return false;
+    if (estoque < 0) {
+        console.log(`[ERRO AO CADASTRAR]: Estoque do produto "${nome}" é inválido. Não pode ser negativo.`);
+        return;
     }
 
-    if (!produto.categoria) {
-        console.log(`[ERRO AO CADASTRAR]: Categoria do produto "${produto.nome}" é inválida. Deve ser informada.`);
-        return false;
+    if (!categoria) {
+        console.log(`[ERRO AO CADASTRAR]: Categoria do produto "${nome}" é inválida. Deve ser informada.`);
+        return;
+    }
+
+    const produto: Produto = {
+        id,
+        nome,
+        categoria,
+        preco,
+        estoque
     }
 
     produtos.push(produto);
-    return true;
+
+    return produto;
 }
 
 export const listaProdutos = (): Produto[] => {
