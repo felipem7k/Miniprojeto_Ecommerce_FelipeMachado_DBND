@@ -13,19 +13,19 @@ export const pegaCarrinhoPorClienteId = (clienteId: number): Carrinho | undefine
     return carrinhos.find(carrinho => carrinho.clienteId === clienteId);
 }
 
-export const adicionaItemCarrinho = (clienteId: number, item: ItemCarrinho): void => {
-    if (item.quantidade < 0) {
+export const adicionaItemCarrinho = (clienteId: number, produtoId: number, quantidade: number): void => {
+    if (quantidade < 0) {
         console.log("[ERRO AO ADICIONAR CARRINHO]: quantidade deve ser 0 ou maior!");
         return;
     }
 
-    if (item.produtoId < 0) {
+    if (produtoId < 0) {
         console.log("[ERRO AO ADICIONAR CARRINHO]: produtoId deve ser maior que 0!");
         return;
     }
 
-    if (buscaProdutoPorId(item.produtoId) === undefined) {
-        console.log(`[ERRO AO ADICIONAR CARRINHO]: produtoId ${item.produtoId} não existe!`);
+    if (buscaProdutoPorId(produtoId) === undefined) {
+        console.log(`[ERRO AO ADICIONAR CARRINHO]: produtoId ${produtoId} não existe!`);
         return;
     }
 
@@ -39,6 +39,11 @@ export const adicionaItemCarrinho = (clienteId: number, item: ItemCarrinho): voi
         carrinhos.push(carrinho);
         console.log(`[INFO]: Carrinho criado para o cliente ${clienteId}!`);
     }
+
+    const item: ItemCarrinho = {
+        produtoId,
+        quantidade
+    };
 
     const index = pegaIndexDoItem(carrinho, item.produtoId);
 

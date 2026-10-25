@@ -23,22 +23,13 @@ cadastraCliente("Luiz Fernando", "luiz.fernando@example.com");
 
 exibeClientes();
 
-adicionaItemCarrinho(5, {
-    produtoId: 1,
-    quantidade: 2
-});
+adicionaItemCarrinho(5, 1, 2);
 
-adicionaItemCarrinho(5, {
-    produtoId: 2,
-    quantidade: 1
-});
+adicionaItemCarrinho(5, 2, 1);
 
 removeItemCarrinho(5, 1, 1);
 
-adicionaItemCarrinho(5, {
-    produtoId: 3,
-    quantidade: 3
-});
+adicionaItemCarrinho(5, 3, 3);
 
 mostraTotalCarrinho(5);
 
