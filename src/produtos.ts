@@ -14,7 +14,7 @@ export const cadastraProduto = (nome: string, categoria: Categoria, preco: numbe
         return;
     }
 
-    if (buscaProdutosPorNome(nome)) {
+    if (buscaProdutoPorNomeExato(nome)) {
         console.log(`[ERRO AO CADASTRAR]: Produto com nome "${nome}" já existe.`);
         return;
     }
@@ -69,7 +69,11 @@ export const buscaProdutoPorId = (id: number): Produto | undefined => {
     return produtos.find(produto => produto.id === id);
 }
 
-export const buscaProdutosPorNome = (nome: string): Produto | undefined => {
+export const buscaProdutosPorNome = (nome: string): Produto[] => {
+    return produtos.filter(produto => sanitizar(produto.nome).includes(sanitizar(nome)));
+}
+
+const buscaProdutoPorNomeExato = (nome: string): Produto | undefined => {
     return produtos.find(produto => sanitizar(produto.nome) === sanitizar(nome));
 }
 
@@ -82,6 +86,28 @@ export const atualizaProduto = (produto: Produto): boolean => {
 
     if (index === -1) {
         console.log(`[ERRO AO ATUALIZAR]: Produto com ID ${produto.id} não encontrado.`);
+        return false;
+    }
+
+    if (!verificarNome(produto.nome)) {
+        console.log(`[ERRO AO ATUALIZAR]: Nome do produto "${produto.nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
+        return false;
+    }
+
+    const produtoComMesmoNome = buscaProdutoPorNomeExato(produto.nome);
+
+    if (produtoComMesmoNome && produtoComMesmoNome.id !== produto.id) {
+        console.log(`[ERRO AO ATUALIZAR]: Produto com nome "${produto.nome}" já existe.`);
+        return false;
+    }
+
+    if (produto.preco <= 0) {
+        console.log(`[ERRO AO ATUALIZAR]: Preço do produto "${produto.nome}" é inválido. Deve ser maior que 0.`);
+        return false;
+    }
+
+    if (produto.estoque < 0) {
+        console.log(`[ERRO AO ATUALIZAR]: Estoque do produto "${produto.nome}" é inválido. Não pode ser negativo.`);
         return false;
     }
 
