@@ -4,6 +4,8 @@ import { sanitizar, validarEmail } from "./uteis";
 
 const pegaIndexCliente = (clienteId: number): number | undefined => clientes.findIndex(cliente => cliente.id === clienteId);
 
+const pegaUltimoIdCliente = (): number => clientes.length > 0 ? clientes[clientes.length - 1].id : 0;
+
 const verificaNome = (nome: string): boolean => {
     const nomeSanitizado = sanitizar(nome);
 
@@ -14,31 +16,39 @@ const verificaNome = (nome: string): boolean => {
     return true;
 };
 
-export const cadastraCliente = (cliente: Cliente): boolean => {
-    const index = pegaIndexCliente(cliente.id);
+export const cadastraCliente = (nome: string, email: string): Cliente | undefined => {
+    const id = pegaUltimoIdCliente() + 1;
+    const index = pegaIndexCliente(id);
 
     if (index !== -1) {
-        console.log(`[ERRO AO CADASTRAR]: Cliente com ID ${cliente.id} já existe.`);
-        return false;
+        console.log(`[ERRO AO CADASTRAR]: Cliente com ID ${id} já existe.`);
+        return;
     }
 
-    if (!verificaNome(cliente.nome)) {
-        console.log(`[ERRO AO CADASTRAR]: Nome do cliente "${cliente.nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
-        return false;
+    if (!verificaNome(nome)) {
+        console.log(`[ERRO AO CADASTRAR]: Nome do cliente "${nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
+        return;
     }
 
-    if (!validarEmail(cliente.email)) {
-        console.log(`[ERRO AO CADASTRAR]: Email do cliente "${cliente.email}" é inválido.`);
-        return false;
+    if (!validarEmail(email)) {
+        console.log(`[ERRO AO CADASTRAR]: Email do cliente "${email}" é inválido.`);
+        return;
     }
 
-    if (buscaClientesPorNome(cliente.nome)) {
-        console.log(`[ERRO AO CADASTRAR]: Cliente com nome "${cliente.nome}" já existe.`);
-        return false;
+    if (buscaClientesPorEmail(email)) {
+        console.log(`[ERRO AO CADASTRAR]: Cliente com email "${email}" já existe.`);
+        return;
     }
+
+    const cliente: Cliente = {
+        id,
+        nome,
+        email
+    };
 
     clientes.push(cliente);
-    return true;
+
+    return cliente;
 }
 
 export const listaClientes = (): Cliente[] => {

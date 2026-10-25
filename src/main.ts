@@ -19,11 +19,7 @@ exibeProdutos();
 
 exibeProdutos();
 
-cadastraCliente({
-    id: 5,
-    nome: "Luiz Fernando",
-    email: "luiz.fernando@example.com"
-});
+cadastraCliente("Luiz Fernando", "luiz.fernando@example.com");
 
 exibeClientes();
 
