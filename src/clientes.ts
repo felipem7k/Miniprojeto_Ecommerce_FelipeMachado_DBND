@@ -18,12 +18,6 @@ const verificaNome = (nome: string): boolean => {
 
 export const cadastraCliente = (nome: string, email: string): Cliente | undefined => {
     const id = pegaUltimoIdCliente() + 1;
-    const index = pegaIndexCliente(id);
-
-    if (index !== -1) {
-        console.log(`[ERRO AO CADASTRAR]: Cliente com ID ${id} já existe.`);
-        return;
-    }
 
     if (!verificaNome(nome)) {
         console.log(`[ERRO AO CADASTRAR]: Nome do cliente "${nome}" é inválido. Deve ter pelo menos 3 caracteres.`);

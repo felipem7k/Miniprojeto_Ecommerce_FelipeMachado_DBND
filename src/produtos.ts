@@ -19,13 +19,6 @@ const verificaNome = (nome: string): boolean => {
 export const cadastraProduto = (nome: string, categoria: Categoria, preco: number, estoque: number = 1): Produto | undefined => {
     const id = pegaUltimoIdProduto() + 1;
 
-    const index = pegaIndexProduto(id);
-
-    if (index !== -1) {
-        console.log(`[ERRO AO CADASTRAR]: Produto com ID ${id} já existe.`);
-        return;
-    }
-
     if (!verificaNome(nome)) {
         console.log(`[ERRO AO CADASTRAR]: Nome do produto "${nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
         return;
