@@ -18,7 +18,7 @@ export const cadastraCliente = (nome: string, email: string): Cliente | undefine
         return;
     }
 
-    if (buscaClientesPorEmail(email)) {
+    if (buscaClientePorEmail(email)) {
         console.log(`[ERRO AO CADASTRAR]: Cliente com email "${email}" já existe.`);
         return;
     }
@@ -54,10 +54,11 @@ export const buscaClientePorId = (id: number): Cliente | undefined => {
     return clientes.find(cliente => cliente.id === id);
 }
 
-export const buscaClientesPorNome = (nome: string): Cliente | undefined => {
-    return clientes.find(cliente => sanitizar(cliente.nome) === sanitizar(nome));
+
+export const buscaClientesPorNome = (nome: string): Cliente[] => {
+    return clientes.filter(cliente => sanitizar(cliente.nome) === sanitizar(nome));
 }
 
-export const buscaClientesPorEmail = (email: string): Cliente | undefined => {
+export const buscaClientePorEmail = (email: string): Cliente | undefined => {
     return clientes.find(cliente => sanitizar(cliente.email) === sanitizar(email));
 }
