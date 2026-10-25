@@ -128,6 +128,19 @@ export const atualizaItemCarrinho = (clienteId: number, item: ItemCarrinho): voi
     }
 }
 
+export const limpaCarrinho = (clienteId: number): boolean => {
+    const carrinho = pegaCarrinhoPorClienteId(clienteId);
+
+    if (!carrinho) {
+        console.log(`[ERRO AO LIMPAR CARRINHO]: carrinho do cliente ${clienteId} não encontrado!`);
+        return false;
+    }
+
+    carrinho.itens = [];
+    console.log(`[INFO]: Carrinho do cliente ${clienteId} limpo!`);
+    return true;
+}
+
 const calculaSubtotalItem = (item: ItemCarrinho): number => {
     return item.quantidade * (buscaProdutoPorId(item.produtoId)?.preco || 0);
 }

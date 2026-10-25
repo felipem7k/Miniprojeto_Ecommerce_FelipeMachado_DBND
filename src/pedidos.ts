@@ -1,4 +1,4 @@
-import { calculaTotalCarrinho, pegaCarrinhoPorClienteId } from "./carrinho";
+import { calculaTotalCarrinho, limpaCarrinho, pegaCarrinhoPorClienteId } from "./carrinho";
 import { buscaClientePorId } from "./clientes";
 import { buscaProdutoPorId, reduzEstoqueProduto } from "./produtos";
 import { Pedido } from "./types";
@@ -83,6 +83,8 @@ export const finalizaPedido = (clienteId: number): void => {
     }
 
     pedidos.push(pedido);
+
+    limpaCarrinho(clienteId);
 
     console.log(`[INFO]: Pedido ${pedido.id} finalizado com sucesso!`);
 }
