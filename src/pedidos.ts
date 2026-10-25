@@ -1,14 +1,14 @@
 import { calculaTotalCarrinho, limpaCarrinho, pegaCarrinhoPorClienteId } from "./carrinho";
 import { buscaClientePorId } from "./clientes";
 import { buscaProdutoPorId, reduzEstoqueProduto } from "./produtos";
-import { Pedido } from "./types";
+import { ItemCarrinho, ItemPedido, Pedido } from "./types";
 
 const pedidos: Pedido[] = [];
 
 const pegaUltimoIdPedido = (): number => pedidos.length > 0 ? pedidos[pedidos.length - 1].id : 0;
 
-const verificaEstoque = (pedido: Pedido): boolean => {
-    for (const item of pedido.itens) {
+const verificaEstoque = (itens: ItemCarrinho[]): boolean => {
+    for (const item of itens) {
         const produto = buscaProdutoPorId(item.produtoId);
 
         if (!produto) {
@@ -65,17 +65,23 @@ export const finalizaPedido = (clienteId: number): void => {
         return;
     }
 
+    if (!verificaEstoque(itens)) {
+        return;
+    }
+
+    const itensPedido: ItemPedido[] = itens.map(item => ({
+        produtoId: item.produtoId,
+        quantidade: item.quantidade,
+        precoUnitario: buscaProdutoPorId(item.produtoId)?.preco || 0
+    }));
+
     const pedido: Pedido = {
         id,
         clienteId,
-        itens,
+        itens: itensPedido,
         total: calculaTotalCarrinho(clienteId),
         data: new Date()
     };
-
-    if (!verificaEstoque(pedido)) {
-        return;
-    }
 
     for (const item of pedido.itens) {
         console.log(`[INFO]: Reduzindo estoque do produto ${item.produtoId} em ${item.quantidade}`);
