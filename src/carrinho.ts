@@ -14,12 +14,12 @@ export const pegaCarrinhoPorClienteId = (clienteId: number): Carrinho | undefine
 }
 
 export const adicionaItemCarrinho = (clienteId: number, produtoId: number, quantidade: number): void => {
-    if (quantidade < 0) {
-        console.log("[ERRO AO ADICIONAR CARRINHO]: quantidade deve ser 0 ou maior!");
+    if (quantidade <= 0) {
+        console.log("[ERRO AO ADICIONAR CARRINHO]: quantidade deve ser maior que 0!");
         return;
     }
 
-    if (produtoId < 0) {
+    if (produtoId <= 0) {
         console.log("[ERRO AO ADICIONAR CARRINHO]: produtoId deve ser maior que 0!");
         return;
     }
@@ -57,7 +57,7 @@ export const adicionaItemCarrinho = (clienteId: number, produtoId: number, quant
 }
 
 export const removeItemCarrinho = (clienteId: number, produtoId: number, quantidade: number = 1): void => {
-    if (produtoId < 0) {
+    if (produtoId <= 0) {
         console.log("[ERRO AO REMOVER CARRINHO]: produtoId deve ser maior que 0!");
         return;
     }
