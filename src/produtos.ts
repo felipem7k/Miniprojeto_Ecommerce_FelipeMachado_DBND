@@ -73,7 +73,7 @@ export const buscaProdutosPorNome = (nome: string): Produto | undefined => {
     return produtos.find(produto => sanitizar(produto.nome) === sanitizar(nome));
 }
 
-export const buscarProdutosPorCategoria = (categoria: Categoria): Produto[] => {
+export const buscaProdutosPorCategoria = (categoria: Categoria): Produto[] => {
     return produtos.filter(produto => sanitizar(produto.categoria) === sanitizar(categoria));
 }
 
