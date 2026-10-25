@@ -132,7 +132,11 @@ const calculaSubtotalItem = (item: ItemCarrinho): number => {
     return item.quantidade * (buscaProdutoPorId(item.produtoId)?.preco || 0);
 }
 
-export const calculaTotalCarrinho = (carrinho: Carrinho): number => {
+export const calculaTotalCarrinho = (clienteId: number): number => {
+    const carrinho = pegaCarrinhoPorClienteId(clienteId);
+    if (!carrinho) {
+        return 0;
+    }
     let total = 0;
     for (const item of carrinho.itens) {
         total += calculaSubtotalItem(item);
@@ -167,6 +171,6 @@ export const mostraTotalCarrinho = (clienteId: number): void => {
     }
     console.log("--------------------------------------------------");
 
-    const total = calculaTotalCarrinho(carrinho);
+    const total = calculaTotalCarrinho(clienteId);
     console.log(`TOTAL: R$ ${total.toFixed(2)}`);
 }
