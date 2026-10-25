@@ -54,8 +54,10 @@ export const adicionaItemCarrinho = (clienteId: number, produtoId: number, quant
         return;
     }
 
-    if (produto.estoque < item.quantidade) {
-        console.log(`[ERRO AO ADICIONAR CARRINHO]: estoque insuficiente para o produto ${item.produtoId}! Estoque atual: ${produto.estoque}, quantidade solicitada: ${item.quantidade}`);
+    const quantidadeNoCarrinho = index !== -1 ? carrinho.itens[index].quantidade : 0;
+
+    if (produto.estoque < quantidadeNoCarrinho + item.quantidade) {
+        console.log(`[ERRO AO ADICIONAR CARRINHO]: estoque insuficiente para o produto ${item.produtoId}! Estoque atual: ${produto.estoque}, quantidade no carrinho: ${quantidadeNoCarrinho}, quantidade solicitada: ${item.quantidade}`);
         return;
     }
 
@@ -121,6 +123,18 @@ export const atualizaItemCarrinho = (clienteId: number, item: ItemCarrinho): voi
 
     const index = pegaIndexDoItem(carrinho, item.produtoId);
     if (index !== -1) {
+        const produto = buscaProdutoPorId(item.produtoId);
+
+        if (!produto) {
+            console.log(`[ERRO AO ATUALIZAR CARRINHO]: produtoId ${item.produtoId} não existe!`);
+            return;
+        }
+
+        if (produto.estoque < item.quantidade) {
+            console.log(`[ERRO AO ATUALIZAR CARRINHO]: estoque insuficiente para o produto ${item.produtoId}! Estoque atual: ${produto.estoque}, quantidade solicitada: ${item.quantidade}`);
+            return;
+        }
+
         carrinho.itens[index].quantidade = item.quantidade;
         console.log(`[INFO]: Item ${item.produtoId} atualizado no carrinho!`);
     } else {
