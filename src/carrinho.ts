@@ -47,6 +47,18 @@ export const adicionaItemCarrinho = (clienteId: number, produtoId: number, quant
 
     const index = pegaIndexDoItem(carrinho, item.produtoId);
 
+    const produto = buscaProdutoPorId(item.produtoId);
+
+    if (!produto) {
+        console.log(`[ERRO AO ADICIONAR CARRINHO]: produtoId ${item.produtoId} não existe!`);
+        return;
+    }
+
+    if (produto.estoque < item.quantidade) {
+        console.log(`[ERRO AO ADICIONAR CARRINHO]: estoque insuficiente para o produto ${item.produtoId}! Estoque atual: ${produto.estoque}, quantidade solicitada: ${item.quantidade}`);
+        return;
+    }
+
     if (index !== -1) {
         carrinho.itens[index].quantidade += item.quantidade;
     } else {
