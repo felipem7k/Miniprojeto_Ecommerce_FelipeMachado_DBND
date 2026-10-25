@@ -1,8 +1,11 @@
+import { calculaTotalCarrinho, pegaCarrinhoPorClienteId } from "./carrinho";
 import { buscaClientePorId } from "./clientes";
 import { buscaProdutoPorId, reduzEstoqueProduto } from "./produtos";
 import { Pedido } from "./types";
 
 const pedidos: Pedido[] = [];
+
+const pegaUltimoIdPedido = (): number => pedidos.length > 0 ? pedidos[pedidos.length - 1].id : 0;
 
 const verificaEstoque = (pedido: Pedido): boolean => {
     for (const item of pedido.itens) {
@@ -20,36 +23,55 @@ const verificaEstoque = (pedido: Pedido): boolean => {
     return true;
 }
 
-export const finalizaPedido = (pedido: Pedido): void => {
-    if (pedido.itens.length === 0) {
+export const finalizaPedido = (clienteId: number): void => {
+    const carrinho = pegaCarrinhoPorClienteId(clienteId);
+
+    if (!carrinho) {
+        console.log(`[ERRO AO FINALIZAR PEDIDO]: carrinho do cliente ${clienteId} não encontrado!`);
+        return;
+    }
+
+    const itens = carrinho.itens;
+
+    if (itens.length === 0) {
+        console.log(`[ERRO AO FINALIZAR PEDIDO]: carrinho do cliente ${clienteId} está vazio!`);
+        return;
+    }
+
+    if (itens.length === 0) {
         console.log("[ERRO AO REGISTRAR PEDIDO]: não é possível registrar um pedido sem itens!");
         return;
     }
 
-    if (pedido.total <= 0) {
+    if (calculaTotalCarrinho(clienteId) <= 0) {
         console.log("[ERRO AO REGISTRAR PEDIDO]: total do pedido deve ser maior que 0!");
         return;
     }
 
-    if (pedido.clienteId <= 0) {
+    if (clienteId <= 0) {
         console.log("[ERRO AO REGISTRAR PEDIDO]: clienteId deve ser maior que 0!");
         return;
     }
 
-    if (pedido.id <= 0) {
+    const id = pegaUltimoIdPedido() + 1;
+
+    if (id <= 0) {
         console.log("[ERRO AO REGISTRAR PEDIDO]: id do pedido deve ser maior que 0!");
         return;
     }
 
-    if (pedido.data > new Date()) {
-        console.log("[ERRO AO REGISTRAR PEDIDO]: data do pedido não pode ser no futuro!");
+    if (!buscaClientePorId(clienteId)) {
+        console.log(`[ERRO AO REGISTRAR PEDIDO]: cliente com id ${clienteId} não existe!`);
         return;
     }
 
-    if (!buscaClientePorId(pedido.clienteId)) {
-        console.log(`[ERRO AO REGISTRAR PEDIDO]: cliente com id ${pedido.clienteId} não existe!`);
-        return;
-    }
+    const pedido: Pedido = {
+        id,
+        clienteId,
+        itens,
+        total: calculaTotalCarrinho(clienteId),
+        data: new Date()
+    };
 
     if (!verificaEstoque(pedido)) {
         return;

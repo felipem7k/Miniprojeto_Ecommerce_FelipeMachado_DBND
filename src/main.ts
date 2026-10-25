@@ -1,6 +1,4 @@
-// import { cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
-
-import { adicionaItemCarrinho, calculaTotalCarrinho, mostraTotalCarrinho, pegaCarrinhoPorClienteId, removeItemCarrinho } from "./carrinho";
+import { adicionaItemCarrinho, mostraTotalCarrinho, removeItemCarrinho } from "./carrinho";
 import { cadastraCliente, exibeClientes } from "./clientes";
 import { exibePedidos, finalizaPedido } from "./pedidos";
 import { cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
@@ -33,17 +31,7 @@ adicionaItemCarrinho(5, 3, 3);
 
 mostraTotalCarrinho(5);
 
-const carrinho = pegaCarrinhoPorClienteId(5);
-
-if (carrinho) {
-    finalizaPedido({
-        id: 1,
-        clienteId: 5,
-        itens: carrinho.itens || [],
-        total: calculaTotalCarrinho(carrinho) || 0,
-        data: new Date()
-    });
-}
+finalizaPedido(5);
 
 exibeProdutos();
 
