@@ -2,8 +2,6 @@ import { clientes } from "./dados";
 import { Cliente } from "./types";
 import { sanitizar, validarEmail } from "./uteis";
 
-const pegaIndexCliente = (clienteId: number): number | undefined => clientes.findIndex(cliente => cliente.id === clienteId);
-
 const pegaUltimoIdCliente = (): number => clientes.length > 0 ? clientes[clientes.length - 1].id : 0;
 
 const verificaNome = (nome: string): boolean => {
