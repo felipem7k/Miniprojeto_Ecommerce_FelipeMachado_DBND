@@ -1,23 +1,14 @@
 import { clientes } from "./dados";
 import { Cliente } from "./types";
-import { sanitizar, validarEmail } from "./uteis";
+import { sanitizar, validarEmail, verificarNome } from "./uteis";
 
 const pegaUltimoIdCliente = (): number => clientes.length > 0 ? clientes[clientes.length - 1].id : 0;
 
-const verificaNome = (nome: string): boolean => {
-    const nomeSanitizado = sanitizar(nome);
-
-    if (nomeSanitizado.length < 3) {
-        return false;
-    }
-
-    return true;
-};
 
 export const cadastraCliente = (nome: string, email: string): Cliente | undefined => {
     const id = pegaUltimoIdCliente() + 1;
 
-    if (!verificaNome(nome)) {
+    if (!verificarNome(nome)) {
         console.log(`[ERRO AO CADASTRAR]: Nome do cliente "${nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
         return;
     }

@@ -1,25 +1,15 @@
 import { produtos } from "./dados";
 import { Categoria, Produto } from "./types";
-import { sanitizar } from "./uteis";
+import { sanitizar, verificarNome } from "./uteis";
 
 const pegaIndexProduto = (produtoId: number): number => produtos.findIndex(produto => produto.id === produtoId);
 
 const pegaUltimoIdProduto = (): number => produtos.length > 0 ? produtos[produtos.length - 1].id : 0;
 
-const verificaNome = (nome: string): boolean => {
-    const nomeSanitizado = sanitizar(nome);
-
-    if (nomeSanitizado.length < 3) {
-        return false;
-    }
-
-    return true;
-};
-
 export const cadastraProduto = (nome: string, categoria: Categoria, preco: number, estoque: number = 1): Produto | undefined => {
     const id = pegaUltimoIdProduto() + 1;
 
-    if (!verificaNome(nome)) {
+    if (!verificarNome(nome)) {
         console.log(`[ERRO AO CADASTRAR]: Nome do produto "${nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
         return;
     }
