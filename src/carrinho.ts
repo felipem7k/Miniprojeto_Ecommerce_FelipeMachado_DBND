@@ -69,6 +69,11 @@ export const adicionaItemCarrinho = (clienteId: number, produtoId: number, quant
 }
 
 export const removeItemCarrinho = (clienteId: number, produtoId: number, quantidade: number = 1): void => {
+    if (quantidade <= 0) {
+        console.log("[ERRO AO REMOVER CARRINHO]: quantidade deve ser maior que 0!");
+        return;
+    }
+
     if (produtoId <= 0) {
         console.log("[ERRO AO REMOVER CARRINHO]: produtoId deve ser maior que 0!");
         return;
