@@ -2,6 +2,7 @@ import { adicionaItemCarrinho, mostraTotalCarrinho, removeItemCarrinho } from ".
 import { cadastraCliente, exibeClientes } from "./clientes";
 import { exibePedidos, finalizaPedido } from "./pedidos";
 import { cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
+import { exibeProdutosMaisVendidos, exibeResumoVendas } from "./relatorios";
 
 exibeProdutos();
 
@@ -36,3 +37,7 @@ finalizaPedido(5);
 exibeProdutos();
 
 exibePedidos();
+
+exibeResumoVendas();
+
+exibeProdutosMaisVendidos();

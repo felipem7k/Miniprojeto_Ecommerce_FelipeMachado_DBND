@@ -37,3 +37,14 @@ export type Pedido = {
     total: number;
     data: Date;
 }
+
+export type ResumoVendas = {
+    quantidadePedidos: number;
+    totalFaturado: number;
+}
+
+export type ProdutoVendido = {
+    produtoId: number;
+    quantidade: number;
+    receita: number;
+}
