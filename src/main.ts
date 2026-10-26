@@ -1,6 +1,6 @@
 import { adicionaItemCarrinho, atualizaItemCarrinho, mostraTotalCarrinho, removeItemCarrinho } from "./carrinho";
 import { buscaClientePorId, cadastraCliente, exibeClientes } from "./clientes";
-import { buscaPedidosPorClienteId, exibePedidos, finalizaPedido } from "./pedidos";
+import { exibePedidos, exibePedidosPorClienteId, finalizaPedido } from "./pedidos";
 import { atualizaProduto, buscaProdutoPorId, buscaProdutosPorCategoria, buscaProdutosPorNome, cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
 import { exibeProdutosMaisVendidos, exibeResumoVendas } from "./relatorios";
 
@@ -66,6 +66,8 @@ cadastraProduto("Jaqueta", "Roupas", -1, 12);
 
 adicionaItemCarrinho(2, 2, 100);
 
+adicionaItemCarrinho(99, 1, 1);
+
 cadastraCliente("Outro Joao", "joao@mail.com");
 
 adicionaItemCarrinho(2, 1, 1);
@@ -88,8 +90,7 @@ exibeProdutos();
 
 exibePedidos();
 
-console.log("Pedidos do cliente 1:");
-console.log(buscaPedidosPorClienteId(1));
+exibePedidosPorClienteId(1);
 
 console.log("\n===== RELATÓRIOS =====");
 

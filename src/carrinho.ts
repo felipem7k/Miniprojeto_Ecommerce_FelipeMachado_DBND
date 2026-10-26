@@ -1,3 +1,4 @@
+import { buscaClientePorId } from "./clientes";
 import { buscaProdutoPorId } from "./produtos";
 import { Carrinho, ItemCarrinho } from "./types"
 
@@ -24,12 +25,28 @@ export const adicionaItemCarrinho = (clienteId: number, produtoId: number, quant
         return;
     }
 
-    if (buscaProdutoPorId(produtoId) === undefined) {
+    if (!buscaClientePorId(clienteId)) {
+        console.log(`[ERRO AO ADICIONAR CARRINHO]: cliente com id ${clienteId} não existe!`);
+        return;
+    }
+
+    const produto = buscaProdutoPorId(produtoId);
+
+    if (!produto) {
         console.log(`[ERRO AO ADICIONAR CARRINHO]: produtoId ${produtoId} não existe!`);
         return;
     }
 
     let carrinho = pegaCarrinhoPorClienteId(clienteId);
+
+    const itemNoCarrinho = carrinho ? buscaItemNoCarrinho(carrinho, produtoId) : undefined;
+
+    const quantidadeNoCarrinho = itemNoCarrinho ? itemNoCarrinho.quantidade : 0;
+
+    if (produto.estoque < quantidadeNoCarrinho + quantidade) {
+        console.log(`[ERRO AO ADICIONAR CARRINHO]: estoque insuficiente para o produto ${produtoId}! Estoque atual: ${produto.estoque}, quantidade no carrinho: ${quantidadeNoCarrinho}, quantidade solicitada: ${quantidade}`);
+        return;
+    }
 
     if (!carrinho) {
         carrinho = {
@@ -40,34 +57,13 @@ export const adicionaItemCarrinho = (clienteId: number, produtoId: number, quant
         console.log(`[INFO]: Carrinho criado para o cliente ${clienteId}!`);
     }
 
-    const item: ItemCarrinho = {
-        produtoId,
-        quantidade
-    };
-
-    const index = pegaIndexDoItem(carrinho, item.produtoId);
-
-    const produto = buscaProdutoPorId(item.produtoId);
-
-    if (!produto) {
-        console.log(`[ERRO AO ADICIONAR CARRINHO]: produtoId ${item.produtoId} não existe!`);
-        return;
-    }
-
-    const quantidadeNoCarrinho = index !== -1 ? carrinho.itens[index].quantidade : 0;
-
-    if (produto.estoque < quantidadeNoCarrinho + item.quantidade) {
-        console.log(`[ERRO AO ADICIONAR CARRINHO]: estoque insuficiente para o produto ${item.produtoId}! Estoque atual: ${produto.estoque}, quantidade no carrinho: ${quantidadeNoCarrinho}, quantidade solicitada: ${item.quantidade}`);
-        return;
-    }
-
-    if (index !== -1) {
-        carrinho.itens[index].quantidade += item.quantidade;
+    if (itemNoCarrinho) {
+        itemNoCarrinho.quantidade += quantidade;
     } else {
-        carrinho.itens.push(item);
+        carrinho.itens.push({ produtoId, quantidade });
     }
 
-    console.log(`[INFO]: Item ${item.produtoId} adicionado ao carrinho!`);
+    console.log(`[INFO]: Item ${produtoId} adicionado ao carrinho!`);
 }
 
 export const removeItemCarrinho = (clienteId: number, produtoId: number, quantidade: number = 1): void => {

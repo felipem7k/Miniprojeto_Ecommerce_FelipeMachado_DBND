@@ -31,6 +31,8 @@ export const cadastraCliente = (nome: string, email: string): Cliente | undefine
 
     clientes.push(cliente);
 
+    console.log(`[INFO]: Cliente "${cliente.nome}" cadastrado com sucesso!`);
+
     return cliente;
 }
 

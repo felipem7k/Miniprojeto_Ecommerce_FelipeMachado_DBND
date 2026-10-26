@@ -44,6 +44,8 @@ export const cadastraProduto = (nome: string, categoria: Categoria, preco: numbe
 
     produtos.push(produto);
 
+    console.log(`[INFO]: Produto "${produto.nome}" cadastrado com sucesso!`);
+
     return produto;
 }
 
@@ -112,6 +114,8 @@ export const atualizaProduto = (produto: Produto): boolean => {
     }
 
     produtos[index] = produto;
+
+    console.log(`[INFO]: Produto ${produto.id} atualizado com sucesso!`);
     return true;
 }
 
@@ -125,6 +129,7 @@ export const removeProduto = (produtoId: number): boolean => {
 
     produtos.splice(index, 1);
 
+    console.log(`[INFO]: Produto ${produtoId} removido com sucesso!`);
     return true;
 }
 

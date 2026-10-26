@@ -99,18 +99,37 @@ export const listaPedidos = (): Pedido[] => {
     return pedidos;
 }
 
-export const exibePedidos = (): void => {
-    console.log("Pedidos Registrados:");
-
-    for (const pedido of pedidos) {
-        console.log(`
+const exibePedido = (pedido: Pedido): void => {
+    console.log(`
             ID: ${pedido.id}
             Cliente ID: ${pedido.clienteId}
             Itens: ${JSON.stringify(pedido.itens)}
             Total: ${pedido.total}
             Data: ${pedido.data.toISOString()}
         `);
-        console.log("--------------------------------------------------")
+    console.log("--------------------------------------------------")
+}
+
+export const exibePedidos = (): void => {
+    console.log("Pedidos Registrados:");
+
+    for (const pedido of pedidos) {
+        exibePedido(pedido);
+    }
+}
+
+export const exibePedidosPorClienteId = (clienteId: number): void => {
+    console.log(`Pedidos do cliente ${clienteId}:`);
+
+    const pedidosDoCliente = buscaPedidosPorClienteId(clienteId);
+
+    if (pedidosDoCliente.length === 0) {
+        console.log("[INFO]: Nenhum pedido encontrado!");
+        return;
+    }
+
+    for (const pedido of pedidosDoCliente) {
+        exibePedido(pedido);
     }
 }
 
