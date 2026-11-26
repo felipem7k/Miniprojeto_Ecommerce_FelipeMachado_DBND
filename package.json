@@ -1,0 +1,13 @@
+{
+  "name": "miniprojeto-ecommerce-felipemachado-dbnd",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/main.js"
+  },
+  "devDependencies": {
+    "typescript": "5.7.3"
+  }
+}

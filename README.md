@@ -88,11 +88,16 @@ O projeto roda no terminal, sem páginas web, pagamento ou banco de dados. Os da
 
 ## Instruções de compilação e execução:
 
-1. Clone o repositório para sua máquina local.
-2. Navegue até o diretório do projeto.
-3. Tenha o [Node.js](https://nodejs.org) instalado e o TypeScript disponível (`npm install -g typescript`).
-4. Compile o código TypeScript para JavaScript usando o comando `tsc`.
-5. Execute o arquivo `main.js` gerado na pasta `dist` usando o comando `node dist/main.js`.
+Tenha o [Node.js](https://nodejs.org) com npm instalado. Na pasta do projeto, execute:
+
+```bash
+npm ci
+npm start
+```
+
+`npm ci` instala o TypeScript localmente na versão registrada no `package-lock.json`. `npm start` compila o projeto para `dist/` e executa `dist/main.js`.
+
+Para apenas compilar, use `npm run build`.
 
 ## Exemplos das principais operações:
 
