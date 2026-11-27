@@ -1,5 +1,5 @@
 import { adicionaItemCarrinho, atualizaItemCarrinho, mostraTotalCarrinho, removeItemCarrinho } from "./carrinho";
-import { buscaClientePorId, cadastraCliente, deletaCliente, exibeClientes } from "./clientes";
+import { buscaClientePorEmail, buscaClientePorId, buscaClientesPorNome, cadastraCliente, deletaCliente, exibeClientes } from "./clientes";
 import { initDatabase } from "./database";
 import { exibePedidos, exibePedidosPorClienteId, finalizaPedido } from "./pedidos";
 import { atualizaProduto, buscaProdutoPorId, buscaProdutosPorCategoria, buscaProdutosPorNome, cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
@@ -12,16 +12,40 @@ async function main() {
     console.log("Database iniciado!");
 
     
-    const cliante1 = await cadastraCliente("João Pedro", "joaope@mail.com", "98265433100");
-    if (cliante1) {
-        console.log(`Cliente cadastrado: ${cliante1.nome} (ID: ${cliante1.id})`);
+    const cliente1 = await cadastraCliente("João Pedro", "joaoped@mail.com", "96565433100");
+    if (cliente1) {
+        console.log(`Cliente cadastrado: ${cliente1.nome} (ID: ${cliente1.id})`);
         
-        await deletaCliente(cliante1.id);
-        
-        console.log(`Cliente deletado: ${cliante1.nome} (ID: ${cliante1.id})`);
+        // await deletaCliente(cliente1.id);
+        // console.log(`Cliente deletado: ${cliente1.nome} (ID: ${cliente1.id})`);
+    }
+
+    const buscaPorId = await buscaClientePorId(1);
+    if (buscaPorId) {
+        console.log(`Cliente encontrado por ID: ${buscaPorId.nome} (ID: ${buscaPorId.id})`);
+    } else {
+        console.log("Cliente não encontrado por ID.");
+    }
+
+    const buscaPorNome = await buscaClientesPorNome("João Pedro");
+    if (buscaPorNome) {
+        console.log(`Cliente encontrado por nome: ${buscaPorNome.nome} (ID: ${buscaPorNome.id})`);
+    } else {
+        console.log("Cliente não encontrado por nome.");
+    }
+
+    const buscaPorEmail = await buscaClientePorEmail("joaope@mail.com");
+    if (buscaPorEmail) {
+        console.log(`Cliente encontrado por email: ${buscaPorEmail.nome} (ID: ${buscaPorEmail.id})`);
+    } else {
+        console.log("Cliente não encontrado por email.");
     }
 
     await exibeClientes();
+    if (cliente1) {
+        await deletaCliente(cliente1.id);
+        console.log(`Cliente deletado: ${cliente1.nome} (ID: ${cliente1.id})`);
+    }
 }
 
 main().then(() => {

@@ -23,7 +23,7 @@ export const cadastraCliente = async (nome: string, email: string, cpf: string):
         return;
     }
 
-    if (buscaClientePorEmail(email)) {
+    if (await buscaClientePorEmail(email)) {
         console.log(`[ERRO AO CADASTRAR]: Cliente com email "${email}" já existe.`);
         return;
     }
@@ -65,15 +65,42 @@ export const exibeClientes = async (): Promise<void> => {
     }
 }
 
-export const buscaClientePorId = (id: number): Cliente | undefined => {
-    return clientes.find(cliente => cliente.id === id);
+export const buscaClientePorId = async (id: number): Promise<Cliente | undefined> => {
+    const lista = await pool.query(
+        'SELECT * FROM cliente WHERE id_cliente = $1',
+        [id]
+    );
+
+    if (lista.rowCount === 0) {
+        return
+    }
+
+    return formataCliente(lista.rows[0]);
 }
 
 
-export const buscaClientesPorNome = (nome: string): Cliente[] => {
-    return clientes.filter(cliente => sanitizar(cliente.nome) === sanitizar(nome));
+export const buscaClientesPorNome = async (nome: string): Promise<Cliente | undefined> => {
+    const lista = await pool.query(
+        'SELECT * FROM cliente WHERE nome = $1',
+        [nome]
+    );
+
+    if (lista.rowCount === 0) {
+        return
+    }
+
+    return formataCliente(lista.rows[0]);
 }
 
-export const buscaClientePorEmail = (email: string): Cliente | undefined => {
-    return clientes.find(cliente => sanitizar(cliente.email) === sanitizar(email));
+export const buscaClientePorEmail = async (email: string): Promise<Cliente | undefined> => {
+    const lista = await pool.query(
+        'SELECT * FROM cliente WHERE email = $1',
+        [email]
+    );
+
+    if (lista.rowCount === 0) {
+        return
+    }
+
+    return formataCliente(lista.rows[0]);
 }
