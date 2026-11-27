@@ -1,9 +1,5 @@
-import { adicionaItemCarrinho, atualizaItemCarrinho, mostraTotalCarrinho, removeItemCarrinho } from "./carrinho";
 import { buscaClientePorEmail, buscaClientePorId, buscaClientesPorNome, cadastraCliente, deletaCliente, exibeClientes } from "./clientes";
 import { initDatabase } from "./database";
-import { exibePedidos, exibePedidosPorClienteId, finalizaPedido } from "./pedidos";
-import { atualizaProduto, buscaProdutoPorId, buscaProdutosPorCategoria, buscaProdutosPorNome, cadastraProduto, exibeProdutos, removeProduto } from "./produtos";
-import { exibeProdutosMaisVendidos, exibeResumoVendas } from "./relatorios";
 
 
 async function main() {

@@ -1,7 +1,6 @@
-import { clientes } from "./dados";
 import { pool } from "./database";
 import { Cliente, DbCliente } from "./types";
-import { sanitizar, validarEmail, verificarNome } from "./uteis";
+import { validarEmail, verificarNome } from "./uteis";
 
 const formataCliente = (dbCliente: DbCliente): Cliente => {
     return {
