@@ -33,15 +33,31 @@ export type ItemCarrinho = {
     quantidade: number;
 }
 
+export type DbItemPedido = {
+    id_pedido: number;
+    id_produto: number;
+    quantidade: number;
+    preco_unitario: number;
+}
+
 export type ItemPedido = {
     produtoId: number;
     quantidade: number;
     precoUnitario: number;
 }
 
+export type DbPedido = {
+    id_pedido: number;
+    id_cliente: number;
+    id_endereco_entrega: number | null;
+    status: "pendente" | "entregue" | "cancelado";
+    data_pedido: Date;
+}
+
 export type Pedido = {
     id: number;
     clienteId: number;
+    enderecoId: number | null;
     itens: ItemPedido[];
     total: number;
     data: Date;

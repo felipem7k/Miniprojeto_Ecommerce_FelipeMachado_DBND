@@ -1,11 +1,23 @@
 import { calculaTotalCarrinho, limpaCarrinho, pegaCarrinhoPorClienteId } from "./carrinho";
 import { buscaClientePorId } from "./clientes";
+import { pool } from "./database";
 import { buscaProdutoPorId, reduzEstoqueProduto } from "./produtos";
-import { ItemCarrinho, ItemPedido, Pedido } from "./types";
+import { DbPedido, ItemCarrinho, ItemPedido, Pedido } from "./types";
 
 const pedidos: Pedido[] = [];
 
-const pegaUltimoIdPedido = (): number => pedidos.length > 0 ? pedidos[pedidos.length - 1].id : 0;
+const formataPedido = (dbPedido: DbPedido): Pedido => {
+    const itens: ItemPedido[] = [];
+
+    return {
+        id: dbPedido.id_pedido,
+        clienteId: dbPedido.id_cliente,
+        enderecoId: dbPedido.id_endereco_entrega,
+        itens: itens,
+        total: 0,
+        data: new Date()
+    };
+};
 
 const verificaEstoque = (itens: ItemCarrinho[]): boolean => {
     for (const item of itens) {
@@ -23,15 +35,13 @@ const verificaEstoque = (itens: ItemCarrinho[]): boolean => {
     return true;
 }
 
-export const finalizaPedido = (clienteId: number): void => {
-    const carrinho = pegaCarrinhoPorClienteId(clienteId);
+export const finalizaPedido = async (clienteId: number, enderecoId: number, itens: ItemPedido[]): Promise<void> => {
+    // const carrinho = pegaCarrinhoPorClienteId(clienteId);
 
-    if (!carrinho) {
-        console.log(`[ERRO AO FINALIZAR PEDIDO]: carrinho do cliente ${clienteId} não encontrado!`);
-        return;
-    }
-
-    const itens = carrinho.itens;
+    // if (!carrinho) {
+    //     console.log(`[ERRO AO FINALIZAR PEDIDO]: carrinho do cliente ${clienteId} não encontrado!`);
+    //     return;
+    // }
 
     if (itens.length === 0) {
         console.log(`[ERRO AO FINALIZAR PEDIDO]: carrinho do cliente ${clienteId} está vazio!`);
@@ -43,20 +53,13 @@ export const finalizaPedido = (clienteId: number): void => {
         return;
     }
 
-    if (calculaTotalCarrinho(clienteId) <= 0) {
-        console.log("[ERRO AO REGISTRAR PEDIDO]: total do pedido deve ser maior que 0!");
-        return;
-    }
+    // if (calculaTotalCarrinho(clienteId) <= 0) {
+    //     console.log("[ERRO AO REGISTRAR PEDIDO]: total do pedido deve ser maior que 0!");
+    //     return;
+    // }
 
     if (clienteId <= 0) {
         console.log("[ERRO AO REGISTRAR PEDIDO]: clienteId deve ser maior que 0!");
-        return;
-    }
-
-    const id = pegaUltimoIdPedido() + 1;
-
-    if (id <= 0) {
-        console.log("[ERRO AO REGISTRAR PEDIDO]: id do pedido deve ser maior que 0!");
         return;
     }
 
@@ -69,30 +72,61 @@ export const finalizaPedido = (clienteId: number): void => {
         return;
     }
 
-    const itensPedido: ItemPedido[] = itens.map(item => ({
-        produtoId: item.produtoId,
-        quantidade: item.quantidade,
-        precoUnitario: buscaProdutoPorId(item.produtoId)?.preco || 0
-    }));
+    // TODO: implementar
+    // const itensPedido: ItemPedido[] = itens.map(item => ({
+    //     produtoId: item.produtoId,
+    //     quantidade: item.quantidade,
+    //     precoUnitario: buscaProdutoPorId(item.produtoId)?.preco || 0
+    // }));
 
-    const pedido: Pedido = {
-        id,
-        clienteId,
-        itens: itensPedido,
-        total: calculaTotalCarrinho(clienteId),
-        data: new Date()
-    };
+    const conn = await pool.connect();
+    try {
+        await conn.query("BEGIN");
+        const resposta = await conn.query<DbPedido>(
+            'INSERT INTO pedido (id_cliente, id_endereco_entrega) VALUES ($1, $2) RETURNING *',
+            [clienteId, enderecoId]
+        );
 
-    for (const item of pedido.itens) {
-        console.log(`[INFO]: Reduzindo estoque do produto ${item.produtoId} em ${item.quantidade}`);
-        reduzEstoqueProduto(item.produtoId, item.quantidade);
+        if (resposta.rowCount === 0) {
+            console.log(`[ERRO AO REGISTRAR PEDIDO]: falha ao inserir pedido no banco de dados!`);
+            return;
+        }
+
+        const pedido = formataPedido(resposta.rows[0]);
+        
+        console.log(`[INFO]: Pedido ${pedido.id} registrado com sucesso!`);
+
+        for (const item of itens) {
+            const produto = buscaProdutoPorId(item.produtoId);
+
+            if (!produto) {
+                throw new Error(`Produto de ID ${item.produtoId} não existe!`);
+            }
+
+            await conn.query(
+                `INSERT INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES ($1, $2, $3, $4)`,
+                [pedido.id, item.produtoId, item.quantidade, item.precoUnitario]
+            );
+        }
+
+        // TODO: implementar
+        // for (const item of pedido.itens) {
+        //     console.log(`[INFO]: Reduzindo estoque do produto ${item.produtoId} em ${item.quantidade}`);
+        //     reduzEstoqueProduto(item.produtoId, item.quantidade);
+        // }
+        
+        // limpaCarrinho(clienteId);
+
+        console.log(`[INFO]: Pedido finalizado com sucesso!`);
+        await conn.query("COMMIT");
+    } catch (error) {
+        console.error(`[ERRO AO REGISTRAR PEDIDO]:`, error);
+        await conn.query("ROLLBACK");
+    } finally {
+        conn.release();
     }
-
-    pedidos.push(pedido);
-
-    limpaCarrinho(clienteId);
-
-    console.log(`[INFO]: Pedido ${pedido.id} finalizado com sucesso!`);
+    
+    console.log(`[INFO]: Transação concluída com sucesso!`);
 }
 
 export const listaPedidos = (): Pedido[] => {
