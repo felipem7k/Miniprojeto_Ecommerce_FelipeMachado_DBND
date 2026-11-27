@@ -1,13 +1,18 @@
 import { clientes } from "./dados";
-import { Cliente } from "./types";
+import { pool } from "./database";
+import { Cliente, DbCliente } from "./types";
 import { sanitizar, validarEmail, verificarNome } from "./uteis";
 
-const pegaUltimoIdCliente = (): number => clientes.length > 0 ? clientes[clientes.length - 1].id : 0;
+const formataCliente = (dbCliente: DbCliente): Cliente => {
+    return {
+        id: dbCliente.id_cliente,
+        nome: dbCliente.nome,
+        email: dbCliente.email,
+        cpf: dbCliente.cpf
+    };
+}
 
-
-export const cadastraCliente = (nome: string, email: string): Cliente | undefined => {
-    const id = pegaUltimoIdCliente() + 1;
-
+export const cadastraCliente = async (nome: string, email: string, cpf: string): Promise<Cliente | undefined> => {
     if (!verificarNome(nome)) {
         console.log(`[ERRO AO CADASTRAR]: Nome do cliente "${nome}" é inválido. Deve ter pelo menos 3 caracteres.`);
         return;
@@ -23,17 +28,17 @@ export const cadastraCliente = (nome: string, email: string): Cliente | undefine
         return;
     }
 
-    const cliente: Cliente = {
-        id,
-        nome,
-        email
-    };
+    const result = await pool.query<DbCliente>(
+        'INSERT INTO cliente (nome, email, cpf) VALUES ($1, $2, $3) RETURNING *',
+        [nome, email, cpf]
+    );
 
-    clientes.push(cliente);
+    if (result.rowCount === 0) {
+        console.log(`[ERRO AO CADASTRAR]: Não foi possível cadastrar o cliente "${nome}".`);
+        return;
+    }
 
-    console.log(`[INFO]: Cliente "${cliente.nome}" cadastrado com sucesso!`);
-
-    return cliente;
+    return formataCliente(result.rows[0]);
 }
 
 export const listaClientes = (): Cliente[] => {

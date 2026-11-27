@@ -1,9 +1,18 @@
 export type Categoria = "Eletrônicos" | "Roupas" | "Calçados";
 
+export type DbCliente = {
+    id_cliente: number;
+    nome: string;
+    email: string;
+    cpf: string;
+    criado_em: Date;
+}
+
 export type Cliente = {
     id: number;
     nome: string;
     email: string;
+    cpf: string;
 }
 
 export type Produto = {

@@ -35,21 +35,25 @@ export const clientes: Cliente[] = [
     {
         id: 1,
         nome: "João Silva",
-        email: "joao@mail.com"
+        email: "joao@mail.com",
+        cpf: "12345678900"
     },
     {
         id: 2,
         nome: "Maria Souza",
-        email: "maria@mail.com"
+        email: "maria@mail.com",
+        cpf: "98765432100"
     },
     {
         id: 3,
         nome: "Pedro Santos",
-        email: "pedro@mail.com"
+        email: "pedro@mail.com",
+        cpf: "45678912300"
     },
     {
         id: 4,
         nome: "Ana Oliveira",
-        email: "ana@mail.com"
+        email: "ana@mail.com",
+        cpf: "78912345600"
     },
 ]
