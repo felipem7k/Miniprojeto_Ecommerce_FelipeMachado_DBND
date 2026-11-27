@@ -41,11 +41,19 @@ export const cadastraCliente = async (nome: string, email: string, cpf: string):
     return formataCliente(result.rows[0]);
 }
 
-export const listaClientes = (): Cliente[] => {
-    return clientes;
+export const deletaCliente = async (id: number): Promise<boolean> => {
+    const result = await pool.query('DELETE FROM cliente WHERE id_cliente = $1', [id]);
+    return (result.rowCount || 0) > 0;
 }
 
-export const exibeClientes = (): void => {
+export const listaClientes = async (): Promise<Cliente[]> => {
+    const resultado = await pool.query<DbCliente>('SELECT * FROM cliente');
+
+    return resultado.rows.map(formataCliente);
+}
+
+export const exibeClientes = async (): Promise<void> => {
+    const clientes = await listaClientes();
     for (const cliente of clientes) {
         console.log(`
             ID: ${cliente.id}
